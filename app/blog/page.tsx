@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Design Insights & Inspiration | Oaks N Stones Blog",
     description: "Expert tips, trends, and ideas from Pune's premier interior designers.",
-    images: ["/images/hero-living-room.jpg"],
+    images: ["/images/blog-trends.jpg"],
   },
 }
 

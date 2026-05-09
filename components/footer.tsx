@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Phone, Mail, MapPin, Instagram, Facebook, Linkedin, Youtube, Star } from "lucide-react"
 
 const quickLinks = [
@@ -23,11 +24,11 @@ const services = [
 const socialLinks = [
   { href: "https://instagram.com/oaksnstones", icon: Instagram, label: "Instagram" },
   { href: "https://facebook.com/oaksnstones", icon: Facebook, label: "Facebook" },
-  { href: "https://linkedin.com/company/oaksnstones", icon: Linkedin, label: "LinkedIn" },
+  { href: "https://linkedin.com/company/oaks-n-stones", icon: Linkedin, label: "LinkedIn" },
   { href: "https://youtube.com/@oaksnstones", icon: Youtube, label: "YouTube" },
 ]
 
-const MAPS_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.152870613285!2d73.75897!3d18.60815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bb96b4a8e4b7%3A0x0!2sMI+Commercia%2C+Pink+City+Rd%2C+Wakad%2C+Pune%2C+Maharashtra+411057!5e0!3m2!1sen!2sin!4v1712000000000!5m2!1sen!2sin"
+const MAPS_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.0!2d73.7572!3d18.6082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bb983898e563%3A0x6acd9e9b1e5f0e0!2sMI%20Commercia%2C%20Pink%20City%20Rd%2C%20Wakad%2C%20Pune%2C%20Maharashtra%20411057!5e0!3m2!1sen!2sin!4v1715000000000!5m2!1sen!2sin"
 
 export function Footer() {
   return (
@@ -39,7 +40,7 @@ export function Footer() {
           <p className="mb-4 text-sm text-primary-foreground/70">
             Office No. 404, MI Commercia, Pink City Road, Wakad, Pune – 411057
           </p>
-          <div className="aspect-[21/9] w-full overflow-hidden rounded-xl shadow-md">
+          <div className="h-48 w-full overflow-hidden rounded-xl shadow-md">
             <iframe
               src={MAPS_EMBED}
               width="100%"
@@ -60,10 +61,16 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/" aria-label="Oaks N Stones — Home">
-              <span className="font-sans text-2xl font-bold">
-                Oaks <span className="text-accent">N</span> Stones
-              </span>
+            <Link href="/" aria-label="Oaks N Stones — The Interior Designing Firm">
+              <div className="flex items-center gap-3">
+                <div className="relative h-12 w-12 overflow-hidden rounded-lg flex-shrink-0" style={{background:'rgba(255,255,255,0.08)'}}>
+                  <Image src="/logo.jpg" alt="Oaks N Stones Logo" fill className="object-cover opacity-90" />
+                </div>
+                <div>
+                  <span className="font-sans text-xl font-bold text-primary-foreground">Oaks N Stones</span>
+                  <p className="text-[10px] uppercase tracking-widest text-primary-foreground/50 leading-tight">The Interior Designing Firm</p>
+                </div>
+              </div>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-primary-foreground/80">
               Pune's premier luxury interior design studio. 250+ projects, 350,000+ sq ft designed,

@@ -43,11 +43,11 @@ const contactInfo = [
 const socialLinks = [
   { href: "https://instagram.com/oaksnstones", icon: Instagram, label: "Instagram" },
   { href: "https://facebook.com/oaksnstones", icon: Facebook, label: "Facebook" },
-  { href: "https://linkedin.com/company/oaksnstones", icon: Linkedin, label: "LinkedIn" },
+  { href: "https://linkedin.com/company/oaks-n-stones", icon: Linkedin, label: "LinkedIn" },
   { href: "https://youtube.com/@oaksnstones", icon: Youtube, label: "YouTube" },
 ]
 
-const MAPS_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.152870613285!2d73.75897!3d18.60815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bb96b4a8e4b7%3A0x0!2sMI+Commercia%2C+Pink+City+Rd%2C+Wakad%2C+Pune%2C+Maharashtra+411057!5e0!3m2!1sen!2sin!4v1712000000000!5m2!1sen!2sin"
+const MAPS_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.0!2d73.7572!3d18.6082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bb983898e563%3A0x6acd9e9b1e5f0e0!2sMI%20Commercia%2C%20Pink%20City%20Rd%2C%20Wakad%2C%20Pune%2C%20Maharashtra%20411057!5e0!3m2!1sen!2sin!4v1715000000000!5m2!1sen!2sin"
 
 export default function ContactPage() {
   return (
@@ -126,7 +126,7 @@ export default function ContactPage() {
               <p className="mt-2 text-muted-foreground">
                 Office No. 404, MI Commercia, Pink City Road, Wakad, Pune – 411057
               </p>
-              <div className="mt-6 aspect-[4/3] overflow-hidden rounded-xl">
+              <div className="mt-6 h-52 overflow-hidden rounded-xl">
                 <iframe
                   src={MAPS_EMBED}
                   width="100%"

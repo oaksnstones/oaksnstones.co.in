@@ -90,20 +90,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
+      { url: '/logo.jpg', type: 'image/jpeg' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
     ],
-    apple: '/apple-icon.png',
+    apple: '/logo.jpg',
+    shortcut: '/logo.jpg',
   },
 }
 
@@ -160,7 +151,7 @@ export default function RootLayout({
               sameAs: [
                 'https://instagram.com/oaksnstones',
                 'https://facebook.com/oaksnstones',
-                'https://linkedin.com/company/oaksnstones',
+                'https://linkedin.com/company/oaks-n-stones',
                 'https://youtube.com/@oaksnstones'
               ],
               priceRange: '$$',
