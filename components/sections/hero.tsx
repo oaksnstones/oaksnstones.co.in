@@ -11,13 +11,14 @@ export function Hero() {
     <section className="relative min-h-screen overflow-hidden pt-32 md:pt-40">
       {/* Background */}
       <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-transparent to-background/60" />
         <Image
           src="/images/hero-living-room.jpg"
           alt="Grand duplex luxury interior design by Oaks N Stones — premium living spaces in Pune with Italian marble and floor-to-ceiling windows"
           fill priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/96 via-background/75 to-background/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/97 via-background/80 to-background/20" />
       </div>
 
       {/* Content */}
@@ -44,7 +45,7 @@ export function Hero() {
               transition={{ delay: 0.3, duration: 0.8 }}
               className="font-sans text-4xl font-bold leading-tight tracking-tight text-foreground md:text-5xl lg:text-6xl"
             >
-              <span className="text-balance">Crafting Timeless</span>
+              <span className="text-balance">Grand Luxury</span>
               <br />
               <span className="text-accent">Luxury Interiors</span>
             </motion.h1>

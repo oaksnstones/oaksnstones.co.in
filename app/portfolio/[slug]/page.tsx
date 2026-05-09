@@ -116,7 +116,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const project = projects.find(p => p.slug === slug)
+  const project = (Array.isArray(projects) ? projects : []).find(p => p.slug === slug)
   
   if (!project) {
     return { title: "Project Not Found" }
@@ -134,14 +134,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  return projects.map((project) => ({
+  return (Array.isArray(projects) ? projects : []).map((project) => ({
     slug: project.slug,
   }))
 }
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params
-  const project = projects.find(p => p.slug === slug)
+  const project = (Array.isArray(projects) ? projects : []).find(p => p.slug === slug)
   
   if (!project) {
     notFound()

@@ -9,11 +9,11 @@ import { Button } from "@/components/ui/button"
 const projects = [
   {
     id: 1,
-    title: "Modern Luxury Villa",
+    title: "Grand Duplex Residence",
     category: "Residential",
     location: "Wakad, Pune",
     image: "/images/portfolio-bedroom.jpg",
-    slug: "modern-luxury-villa"
+    slug: "grand-duplex-residence"
   },
   {
     id: 2,

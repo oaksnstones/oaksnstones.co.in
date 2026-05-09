@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Home, Building2, Paintbrush, Compass, Box, Wrench, CheckCircle, Phone } from "lucide-react"
+import { ArrowRight, Phone, Home, Building2, Paintbrush, Compass, Box, Wrench, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export const metadata: Metadata = {
@@ -320,7 +320,7 @@ export default function ServicesPage() {
                   {tier.description}
                 </p>
                 <div className="mt-6">
-                  <span className="text-4xl font-bold">INR {tier.price}</span>
+                  <span className="text-3xl font-bold">{tier.price}</span>
                   <span className={`text-sm ${tier.popular ? "text-accent-foreground/80" : "text-primary-foreground/60"}`}> {tier.unit}</span>
                 </div>
                 <ul className="mt-8 space-y-3">
@@ -354,7 +354,14 @@ export default function ServicesPage() {
             your options and create a plan that fits your needs and budget.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+            <a
+                href="tel:+919503931331"
+                className="inline-flex items-center gap-2 rounded-lg bg-accent px-8 py-4 text-base font-bold text-accent-foreground shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+              >
+                <Phone className="h-5 w-5" />
+                Call Now: +91 95039 31331
+              </a>
+              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
               <Link href="/contact">
                 Schedule Consultation
                 <ArrowRight className="ml-2 h-4 w-4" />

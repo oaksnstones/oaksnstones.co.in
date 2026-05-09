@@ -144,22 +144,22 @@ export function BlogClient() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <Link href={`/blog/${blogPosts[0].slug}`} className="group block">
+            <Link href={`/blog/${(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].slug : ""}`} className="group block">
               <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image src={blogPosts[0].image} alt={blogPosts[0].title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <Image src={(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].image : "/images/hero-living-room.jpg"} alt={(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].title : ""} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute top-4 left-4 bg-accent text-accent-foreground px-4 py-2 text-sm font-medium">Featured</div>
                 </div>
                 <div>
-                  <span className="text-accent uppercase tracking-wider text-sm">{blogPosts[0].category}</span>
+                  <span className="text-accent uppercase tracking-wider text-sm">{(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].category : ""}</span>
                   <h2 className="mt-4 text-3xl md:text-4xl font-serif text-foreground group-hover:text-accent transition-colors">
-                    {blogPosts[0].title}
+                    {(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].title : ""}
                   </h2>
-                  <p className="mt-4 text-muted-foreground leading-relaxed">{blogPosts[0].excerpt}</p>
+                  <p className="mt-4 text-muted-foreground leading-relaxed">{(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].excerpt : ""}</p>
                   <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground">
-                    <span>{blogPosts[0].date}</span>
+                    <span>{(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].date : ""}</span>
                     <span>•</span>
-                    <span>{blogPosts[0].readTime}</span>
+                    <span>{(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].readTime : ""}</span>
                   </div>
                 </div>
               </div>
@@ -181,7 +181,7 @@ export function BlogClient() {
             Latest Articles
           </motion.h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.slice(1).map((post, index) => (
+            {(Array.isArray(blogPosts) ? blogPosts : []).slice(1).map((post, index) => (
               <motion.article
                 key={post.slug}
                 initial={{ opacity: 0, y: 30 }}
@@ -229,7 +229,21 @@ export function BlogClient() {
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-3 bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent"
               />
-              <button className="px-8 py-3 bg-accent text-accent-foreground font-medium hover:bg-accent/90 transition-colors">
+              <button
+                type="button"
+                onClick={async (e) => {
+                  const emailInput = e.currentTarget.previousElementSibling as HTMLInputElement
+                  if (!emailInput?.value) return
+                  await fetch("https://formspree.io/f/xojrqbvj", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", Accept: "application/json" },
+                    body: JSON.stringify({ email: emailInput.value, source: "newsletter" }),
+                  }).catch(() => {})
+                  emailInput.value = ""
+                  e.currentTarget.textContent = "Subscribed ✓"
+                }}
+                className="px-8 py-3 bg-accent text-accent-foreground font-medium hover:bg-accent/90 transition-colors whitespace-nowrap"
+              >
                 Subscribe
               </button>
             </div>
