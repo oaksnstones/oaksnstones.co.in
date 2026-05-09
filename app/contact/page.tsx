@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import
- from "lucide-react"
+import { Mail, Phone, MapPin, Clock } from "lucide-react"
+import { Instagram, Facebook, Linkedin, Youtube } from "lucide-react"
 import { ContactForm } from "@/components/contact-form"
 
 export const metadata: Metadata = {
@@ -79,7 +79,7 @@ export default function ContactPage() {
                 <div className="mt-2 space-y-1">
                   {info.details.map((detail, index) => (
                     info.action ? (
-                      <a
+                      
                         key={index}
                         href={info.action}
                         className="block text-sm text-muted-foreground transition-colors hover:text-accent"
@@ -101,7 +101,6 @@ export default function ContactPage() {
       <section className="px-6 py-24">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-12 lg:grid-cols-2">
-            {/* Contact Form */}
             <div>
               <h2 className="font-sans text-2xl font-bold text-foreground">Send Us a Message</h2>
               <p className="mt-2 text-muted-foreground">
@@ -110,14 +109,12 @@ export default function ContactPage() {
               <ContactForm />
             </div>
 
-            {/* Map and Social */}
             <div>
               <h2 className="font-sans text-2xl font-bold text-foreground">Visit Our Studio</h2>
               <p className="mt-2 text-muted-foreground">
                 Come see our showroom and discuss your project in person.
               </p>
               
-              {/* Map */}
               <div className="mt-6 aspect-[4/3] overflow-hidden rounded-xl">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.5551896376!2d73.7640!3d18.5978!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDM1JzUyLjEiTiA3M8KwNDUnNTAuNCJF!5e0!3m2!1sen!2sin!4v1234567890"
@@ -132,7 +129,6 @@ export default function ContactPage() {
                 />
               </div>
 
-              {/* Social Links */}
               <div className="mt-8">
                 <h3 className="font-semibold text-foreground">Follow Us</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
@@ -140,7 +136,7 @@ export default function ContactPage() {
                 </p>
                 <div className="mt-4 flex items-center gap-3">
                   {socialLinks.map((social) => (
-                    <a
+                    
                       key={social.label}
                       href={social.href}
                       target="_blank"
@@ -163,9 +159,7 @@ export default function ContactPage() {
         <div className="mx-auto max-w-4xl">
           <div className="text-center">
             <h2 className="font-sans text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
-            <p className="mt-2 text-muted-foreground">
-              Quick answers to common questions about working with us.
-            </p>
+            <p className="mt-2 text-muted-foreground">Quick answers to common questions about working with us.</p>
           </div>
           <div className="mt-12 space-y-6">
             {[
