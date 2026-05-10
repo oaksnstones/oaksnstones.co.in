@@ -3,7 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, Clock, Tag, User } from "lucide-react"
 import { notFound } from "next/navigation"
-import { blogPosts } from "../blog-client"
+import { blogPosts } from "@/lib/blog-data"
 import { Button } from "@/components/ui/button"
 
 type Props = { params: Promise<{ slug: string }> }

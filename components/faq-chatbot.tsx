@@ -36,7 +36,7 @@ const KB: { keywords: string[]; answer: string; next: string[] }[] = [
   },
   {
     keywords: ["brand", "hettich", "hafele", "century", "material", "quality", "product", "fenesta", "ebco", "kohler", "godrej"],
-    answer: "We are authorized partners with premium brands:\n\n🔧 Hardware: Hettich, Häfele, Ebco\n🪵 Plywood: Century Ply, Merino\n🚪 Windows: Fenesta\n🚿 Sanitaryware: Kohler, Duravit\n🎨 Paints: Asian Paints, Dulux\n📦 Storage: Godrej Interio\n🏗 Tiles: Kajaria\n\nAll materials carry manufacturer warranties.",
+    answer: "We are authorized partners with premium brands:\n\n🔧 Hardware: Hettich, Häfele, Ebco\n🪵 Plywood: Century Ply, Merino\n🚪 Windows: Fenesta\n🚿 Sanitaryware: Kohler, Duravit\n🎨 Paints: Asian Paints, Dulux\n🏗 Tiles: Kajaria\n\nAll materials carry manufacturer warranties.",
     next: ["What is included in the package?", "How much does it cost?", "Book free consultation"],
   },
   {

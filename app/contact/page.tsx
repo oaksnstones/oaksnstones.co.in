@@ -47,7 +47,7 @@ const socialLinks = [
   { href: "https://youtube.com/@oaksnstones", icon: Youtube, label: "YouTube" },
 ]
 
-const MAPS_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.0!2d73.7572!3d18.6082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bb983898e563%3A0x6acd9e9b1e5f0e0!2sMI%20Commercia%2C%20Pink%20City%20Rd%2C%20Wakad%2C%20Pune%2C%20Maharashtra%20411057!5e0!3m2!1sen!2sin!4v1715000000000!5m2!1sen!2sin"
+const MAPS_EMBED = "https://maps.google.com/maps?q=MI+Commercia+Pink+City+Road+Wakad+Pune+411057&output=embed&z=18&hl=en"
 
 export default function ContactPage() {
   return (
