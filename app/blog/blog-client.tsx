@@ -3,99 +3,109 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-
 import { blogPosts } from "@/lib/blog-data"
-
+import { ArrowRight } from "lucide-react"
 
 export function BlogClient() {
+  const featured = blogPosts[0]
+  const rest     = blogPosts.slice(1)
+
   return (
     <main className="min-h-screen bg-background">
+
       {/* Hero */}
-      <section className="relative py-24 lg:py-32 bg-secondary">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-3xl"
-          >
-            <span className="text-accent uppercase tracking-[0.3em] text-sm font-medium">Our Blog</span>
-            <h1 className="mt-4 text-4xl md:text-5xl lg:text-6xl font-serif text-foreground leading-tight">
-              Design Insights & Inspiration
+      <section className="relative py-28 bg-secondary border-b border-border">
+        <div className="mx-auto max-w-7xl px-6">
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+            <span className="text-xs font-semibold uppercase tracking-[0.3em] text-accent">Our Blog</span>
+            <h1 className="mt-4 font-sans text-4xl font-bold leading-tight text-foreground md:text-5xl">
+              Design Insights &amp; Inspiration
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl">
-              Explore our collection of articles featuring interior design tips, trends,
-              and expert insights from Pune&apos;s leading interior designers.
+            <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
+              Interior design tips, trend reports, and honest guides from the Oaks N Stones team in Wakad, Pune.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Featured Post */}
-      <section className="py-16 lg:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <Link href={`/blog/${(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].slug : ""}`} className="group block">
-              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image src={(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].image : "/images/hero-living-room.jpg"} alt={(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].title : ""} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute top-4 left-4 bg-accent text-accent-foreground px-4 py-2 text-sm font-medium">Featured</div>
+      {/* Featured post */}
+      {featured && (
+        <section className="py-16 lg:py-24">
+          <div className="mx-auto max-w-7xl px-6">
+            <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-accent">Featured Article</p>
+            <Link href={`/blog/${featured.slug}`} className="group block">
+              <div className="grid items-center gap-10 lg:grid-cols-2">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+                  <Image
+                    src={featured.image}
+                    alt={featured.title}
+                    fill priority
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <span className="absolute left-4 top-4 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
+                    {featured.category}
+                  </span>
                 </div>
                 <div>
-                  <span className="text-accent uppercase tracking-wider text-sm">{(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].category : ""}</span>
-                  <h2 className="mt-4 text-3xl md:text-4xl font-serif text-foreground group-hover:text-accent transition-colors">
-                    {(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].title : ""}
+                  <h2 className="font-sans text-2xl font-bold text-foreground transition-colors group-hover:text-accent md:text-3xl">
+                    {featured.title}
                   </h2>
-                  <p className="mt-4 text-muted-foreground leading-relaxed">{(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].excerpt : ""}</p>
-                  <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground">
-                    <span>{(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].date : ""}</span>
-                    <span>•</span>
-                    <span>{(Array.isArray(blogPosts) && blogPosts[0]) ? blogPosts[0].readTime : ""}</span>
+                  <p className="mt-4 leading-relaxed text-muted-foreground">{featured.excerpt}</p>
+                  <div className="mt-5 flex items-center gap-4 text-sm text-muted-foreground">
+                    <span>{featured.author}</span>
+                    <span>·</span>
+                    <span>{featured.date}</span>
+                    <span>·</span>
+                    <span>{featured.readTime}</span>
                   </div>
+                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-accent">
+                    Read Article <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
                 </div>
               </div>
             </Link>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
-      {/* Blog Grid */}
-      <section className="py-16 lg:py-24 bg-secondary">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-3xl font-serif text-foreground mb-12"
-          >
-            Latest Articles
-          </motion.h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(Array.isArray(blogPosts) ? blogPosts : []).slice(1).map((post, index) => (
+      {/* Grid */}
+      <section className="bg-secondary py-16 lg:py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <h2 className="mb-12 font-sans text-2xl font-bold text-foreground">More Articles</h2>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {rest.map((post, i) => (
               <motion.article
                 key={post.slug}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
               >
-                <Link href={`/blog/${post.slug}`} className="group block">
-                  <div className="relative aspect-[4/3] overflow-hidden mb-6">
-                    <Image src={post.image} alt={post.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                <Link href={`/blog/${post.slug}`} className="group block h-full">
+                  <div className="relative aspect-[16/10] overflow-hidden rounded-xl">
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <span className="absolute left-3 top-3 rounded-full bg-accent/90 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
+                      {post.category}
+                    </span>
                   </div>
-                  <span className="text-accent uppercase tracking-wider text-xs">{post.category}</span>
-                  <h3 className="mt-2 text-xl font-serif text-foreground group-hover:text-accent transition-colors">{post.title}</h3>
-                  <p className="mt-3 text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
-                  <div className="mt-4 flex items-center gap-3 text-xs text-muted-foreground">
-                    <span>{post.date}</span>
-                    <span>•</span>
-                    <span>{post.readTime}</span>
+                  <div className="mt-4">
+                    <h3 className="font-sans text-lg font-semibold text-foreground transition-colors group-hover:text-accent">
+                      {post.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">{post.excerpt}</p>
+                    <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+                      <span>{post.author}</span>
+                      <span>·</span>
+                      <span>{post.date}</span>
+                      <span>·</span>
+                      <span>{post.readTime}</span>
+                    </div>
                   </div>
                 </Link>
               </motion.article>
@@ -105,45 +115,38 @@ export function BlogClient() {
       </section>
 
       {/* Newsletter */}
-      <section className="py-16 lg:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mx-auto text-center"
-          >
-            <h2 className="text-3xl md:text-4xl font-serif text-foreground">Stay Inspired</h2>
-            <p className="mt-4 text-muted-foreground">
-              Subscribe to our newsletter for the latest design trends, tips, and exclusive insights
-              from Pune&apos;s premier interior design studio.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent"
-              />
-              <button
-                type="button"
-                onClick={async (e) => {
-                  const emailInput = e.currentTarget.previousElementSibling as HTMLInputElement
-                  if (!emailInput?.value) return
-                  await fetch("https://formspree.io/f/xojrqbvj", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", Accept: "application/json" },
-                    body: JSON.stringify({ email: emailInput.value, source: "newsletter" }),
-                  }).catch(() => {})
-                  emailInput.value = ""
-                  e.currentTarget.textContent = "Subscribed ✓"
-                }}
-                className="px-8 py-3 bg-accent text-accent-foreground font-medium hover:bg-accent/90 transition-colors whitespace-nowrap"
-              >
-                Subscribe
-              </button>
-            </div>
-          </motion.div>
+      <section className="py-20 px-6">
+        <div className="mx-auto max-w-xl text-center">
+          <h2 className="font-sans text-2xl font-bold text-foreground">Stay Inspired</h2>
+          <p className="mt-3 text-muted-foreground">
+            Monthly design tips and exclusive insights from our studio in Wakad, Pune.
+          </p>
+          <div className="mt-8 flex gap-3">
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="flex-1 rounded-xl border border-border bg-secondary px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={async (e) => {
+                const btn = e.currentTarget
+                const input = btn.previousElementSibling as HTMLInputElement
+                if (!input?.value) return
+                await fetch("https://formspree.io/f/xojrqbvj", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json", Accept: "application/json" },
+                  body: JSON.stringify({ email: input.value, source: "newsletter" }),
+                }).catch(() => {})
+                input.value = ""
+                btn.textContent = "Subscribed ✓"
+                btn.classList.add("opacity-70")
+              }}
+              className="rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition-all hover:bg-accent/90"
+            >
+              Subscribe
+            </button>
+          </div>
         </div>
       </section>
     </main>

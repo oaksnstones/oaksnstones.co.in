@@ -7,21 +7,23 @@ type Variant = "default" | "hover" | "image"
 export function CustomCursor() {
   const dotRef    = useRef<HTMLDivElement>(null)
   const ringRef   = useRef<HTMLDivElement>(null)
-  const spinRef   = useRef<HTMLDivElement>(null)
+  const trailRef  = useRef<HTMLDivElement>(null)
   const bubbleRef = useRef<HTMLDivElement>(null)
 
-  const [variant, setVariant] = useState<Variant>("default")
-  const [label, setLabel]     = useState("")
   const [visible, setVisible] = useState(false)
+  const [ringSize, setRingSize] = useState(44)
+  const [label, setLabel] = useState("")
+  const [isHover, setIsHover] = useState(false)
+  const [isImage, setIsImage] = useState(false)
 
-  const curX = useRef(-300), curY = useRef(-300)
-  const ringX = useRef(-300), ringY = useRef(-300)
-  const spinAngle = useRef(0)
-
-  // Bubble state managed via refs to avoid re-renders
-  const bubbleOpacity = useRef(0)
-  const idleTimer     = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const bubbleTarget  = useRef(0) // 0 = shrink, 1 = grow
+  const curX   = useRef(-400), curY   = useRef(-400)
+  const ringX  = useRef(-400), ringY  = useRef(-400)
+  const trailX = useRef(-400), trailY = useRef(-400)
+  const bubbleAlpha  = useRef(0)
+  const bubbleTarget = useRef(0)
+  const idleTimer    = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const spinAngle    = useRef(0)
+  const variantRef   = useRef<Variant>("default")
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -32,40 +34,51 @@ export function CustomCursor() {
       const dt = Math.min(now - last, 50)
       last = now
 
-      // Smooth ring follow
-      const t = 1 - Math.pow(0.01, dt / 1000)
-      ringX.current += (curX.current - ringX.current) * t * 12
-      ringY.current += (curY.current - ringY.current) * t * 12
+      // Ring drag — noticeable lag (lerp ~0.08 per frame at 60fps)
+      const ringAlpha  = 1 - Math.pow(0.00004, dt / 1000)
+      // Trail drag — heavy slow drag
+      const trailAlpha = 1 - Math.pow(0.0000001, dt / 1000)
 
-      // Bubble fade
-      const bDelta = bubbleTarget.current === 1 ? 0.025 : -0.04
-      bubbleOpacity.current = Math.max(0, Math.min(0.55, bubbleOpacity.current + bDelta))
+      ringX.current  += (curX.current - ringX.current)  * ringAlpha  * 7
+      ringY.current  += (curY.current - ringY.current)  * ringAlpha  * 7
+      trailX.current += (curX.current - trailX.current) * trailAlpha * 3
+      trailY.current += (curY.current - trailY.current) * trailAlpha * 3
 
-      // Apply transforms
-      const dot = dotRef.current
-      const ring = ringRef.current
-      const spin = spinRef.current
-      const bub  = bubbleRef.current
+      // Bubble
+      const bDir = bubbleTarget.current > 0 ? 0.025 : -0.04
+      bubbleAlpha.current = Math.max(0, Math.min(1, bubbleAlpha.current + bDir))
 
-      if (dot)  dot.style.transform  = `translate3d(${curX.current - 4}px,${curY.current - 4}px,0)`
-      if (ring) ring.style.transform = `translate3d(${ringX.current - 20}px,${ringY.current - 20}px,0)`
-      if (spin) {
-        spinAngle.current = (spinAngle.current + dt * 0.05) % 360
-        spin.style.transform = `translate3d(${ringX.current - 28}px,${ringY.current - 28}px,0) rotate(${spinAngle.current}deg)`
+      // Spin
+      spinAngle.current = (spinAngle.current + dt * 0.06) % 360
+
+      const v = variantRef.current
+      const dot    = dotRef.current
+      const ring   = ringRef.current
+      const trail  = trailRef.current
+      const bubble = bubbleRef.current
+
+      if (dot)  dot.style.transform  = `translate3d(${curX.current - 5}px,${curY.current - 5}px,0)`
+
+      if (ring) {
+        const half = ring.offsetWidth / 2
+        ring.style.transform = `translate3d(${ringX.current - half}px,${ringY.current - half}px,0)`
       }
-      if (bub) {
-        const size = 80 + bubbleOpacity.current * 60
-        bub.style.transform = `translate3d(${curX.current - size/2}px,${curY.current - size/2}px,0)`
-        bub.style.width = `${size}px`
-        bub.style.height = `${size}px`
-        bub.style.opacity = `${bubbleOpacity.current}`
+
+      if (trail) {
+        trail.style.transform = `translate3d(${trailX.current - 34}px,${trailY.current - 34}px,0) rotate(${spinAngle.current}deg)`
+        trail.style.opacity   = v === "hover" ? "0.5" : "0"
+      }
+
+      if (bubble) {
+        bubble.style.transform = `translate3d(${curX.current - 48}px,${curY.current - 48}px,0)`
+        bubble.style.opacity   = `${bubbleAlpha.current * 0.52}`
       }
 
       raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
 
-    const resetIdle = () => {
+    const scheduleIdle = () => {
       bubbleTarget.current = 0
       if (idleTimer.current) clearTimeout(idleTimer.current)
       idleTimer.current = setTimeout(() => { bubbleTarget.current = 1 }, 900)
@@ -74,17 +87,23 @@ export function CustomCursor() {
     const onMove = (e: MouseEvent) => {
       curX.current = e.clientX
       curY.current = e.clientY
-      resetIdle()
+      scheduleIdle()
 
       const t = e.target as HTMLElement
       if (t.closest("img,[data-cursor='image']")) {
-        setVariant("image"); setLabel("View")
-      } else if (t.closest("a,button,input,textarea,select,[role='button']")) {
-        setVariant("hover")
+        variantRef.current = "image"
+        setIsImage(true); setIsHover(false)
+        setLabel("View"); setRingSize(76)
+      } else if (t.closest("a,button,input,textarea,[role='button']")) {
+        variantRef.current = "hover"
+        setIsHover(true); setIsImage(false)
         const el = t.closest<HTMLElement>("a,button,[role='button']")
         setLabel(el?.getAttribute("data-cursor-label") ?? "")
+        setRingSize(56)
       } else {
-        setVariant("default"); setLabel("")
+        variantRef.current = "default"
+        setIsHover(false); setIsImage(false)
+        setLabel(""); setRingSize(44)
       }
     }
 
@@ -108,62 +127,52 @@ export function CustomCursor() {
     }
   }, [])
 
-  const isHover = variant === "hover"
-  const isImage = variant === "image"
-  const ringSize = isImage ? 76 : isHover ? 56 : 40
-
-  // Gold color — prominent on dark backgrounds
-  const GOLD      = "rgba(212,170,70,0.95)"
-  const GOLD_RING = isImage ? "rgba(212,170,70,0.85)" : isHover ? "rgba(212,170,70,0.80)" : "rgba(212,170,70,0.65)"
+  const GOLD      = "rgba(210,168,60,0.95)"
+  const GOLD_RING = `rgba(210,168,60,${isImage ? 0.85 : isHover ? 0.78 : 0.62})`
 
   return (
     <>
-      {/* Idle glow bubble — fades in when stopped */}
+      {/* Single faded bubble — appears after cursor is idle for 0.9s */}
       <div
         ref={bubbleRef}
-        className="pointer-events-none fixed top-0 left-0 z-[9996] hidden md:block rounded-full"
+        className="pointer-events-none fixed top-0 left-0 z-[9995] hidden md:block rounded-full"
         style={{
-          width: 80, height: 80,
-          background: "radial-gradient(circle, rgba(212,170,70,0.22) 0%, rgba(212,170,70,0.06) 50%, transparent 70%)",
+          width: 96,
+          height: 96,
+          background: "radial-gradient(circle, rgba(210,168,60,0.30) 0%, rgba(210,168,60,0.08) 50%, transparent 72%)",
           opacity: 0,
-          willChange: "transform, opacity, width, height",
-          transition: "none",
-          filter: "blur(2px)",
+          filter: "blur(5px)",
+          willChange: "transform, opacity",
         }}
       />
 
-      {/* Dot — larger and more visible (8px) */}
+      {/* Slow dashed trailing ring — heavy drag on hover */}
       <div
-        ref={dotRef}
-        className="pointer-events-none fixed top-0 left-0 z-[10000] hidden md:block rounded-full"
+        ref={trailRef}
+        className="pointer-events-none fixed top-0 left-0 z-[9997] hidden md:block rounded-full"
         style={{
-          width: 8, height: 8,
-          background: GOLD,
-          boxShadow: `0 0 6px rgba(212,170,70,0.6)`,
-          opacity: visible && !isHover ? 1 : 0,
-          transition: "opacity 0.15s",
-          willChange: "transform",
+          width: 68,
+          height: 68,
+          border: "1px dashed rgba(210,168,60,0.28)",
+          opacity: 0,
+          willChange: "transform, opacity",
         }}
       />
 
-      {/* Outer ring */}
+      {/* Main ring — medium drag */}
       <div
         ref={ringRef}
         className="pointer-events-none fixed top-0 left-0 z-[9999] hidden md:flex items-center justify-center rounded-full"
         style={{
-          width: ringSize,
+          width:  ringSize,
           height: ringSize,
           border: `${isImage ? 2 : 1.5}px solid ${GOLD_RING}`,
-          background: isImage
-            ? "rgba(212,170,70,0.08)"
-            : isHover
-            ? "rgba(212,170,70,0.05)"
-            : "transparent",
+          background: isHover || isImage ? "rgba(210,168,60,0.05)" : "transparent",
           boxShadow: isHover || isImage
-            ? `0 0 16px rgba(212,170,70,0.15), inset 0 0 8px rgba(212,170,70,0.05)`
+            ? "0 0 20px rgba(210,168,60,0.15), inset 0 0 8px rgba(210,168,60,0.04)"
             : "none",
           opacity: visible ? 1 : 0,
-          transition: "width 0.2s ease, height 0.2s ease, border 0.2s ease, box-shadow 0.2s ease, opacity 0.15s",
+          transition: "width 0.22s ease, height 0.22s ease, border 0.22s ease, box-shadow 0.25s ease, opacity 0.15s",
           willChange: "transform",
         }}
       >
@@ -172,8 +181,7 @@ export function CustomCursor() {
             fontSize: 9, fontWeight: 700,
             letterSpacing: "0.2em",
             textTransform: "uppercase",
-            color: GOLD,
-            lineHeight: 1,
+            color: GOLD, lineHeight: 1,
             userSelect: "none",
           }}>
             {label}
@@ -181,16 +189,17 @@ export function CustomCursor() {
         )}
       </div>
 
-      {/* Spinning dashed outer ring on hover */}
+      {/* Dot — snaps instantly (no lag), gold glow */}
       <div
-        ref={spinRef}
-        className="pointer-events-none fixed top-0 left-0 z-[9998] hidden md:block rounded-full"
+        ref={dotRef}
+        className="pointer-events-none fixed top-0 left-0 z-[10000] hidden md:block rounded-full"
         style={{
-          width: 56,
-          height: 56,
-          border: "1px dashed rgba(212,170,70,0.35)",
-          opacity: visible && isHover ? 1 : 0,
-          transition: "opacity 0.2s",
+          width: 10,
+          height: 10,
+          background: GOLD,
+          boxShadow: "0 0 10px rgba(210,168,60,0.6)",
+          opacity: visible && !isHover ? 1 : 0,
+          transition: "opacity 0.15s",
           willChange: "transform",
         }}
       />
